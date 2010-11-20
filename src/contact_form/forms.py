@@ -1,9 +1,14 @@
 
 from django import forms
+from django.core.mail import send_mail
 
 from contact_form import models
 
 class ContactForm(forms.ModelForm):
 
     class Meta:
-        model = models.ContactData 
+        model = models.ContactEmail
+
+    def save(*args, **kwargs):
+        print("send the email sucka!")
+        return super(ContactForm, self).save(*args, **kwargs)
