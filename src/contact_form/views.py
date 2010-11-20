@@ -1,16 +1,14 @@
 
 from django.core.urlresolvers import reverse
-from django.views.generic.edit import CreateView
+from django.views.generic import TemplateView, CreateView
 
 from contact_form.forms import ContactForm
 
-
-def completed(request):
-    from django import http
-    return http.HttpResponse("completed")
+class CompletedPage(TemplateView):
+    template_name = "contact_form/contact_completed.html"
 
 class ContactPage(CreateView):
-    template_name = "contact_form/contact_form.html"
+    template_name = "contact_form/contact.html"
     form_class = ContactForm
 
     def get_success_url(self):

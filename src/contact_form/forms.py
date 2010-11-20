@@ -9,6 +9,6 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = models.ContactEmail
 
-    def save(*args, **kwargs):
+    def save(self, *args, **kwargs):
         print("send the email sucka!")
         return super(ContactForm, self).save(*args, **kwargs)

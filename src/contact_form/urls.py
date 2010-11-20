@@ -1,9 +1,9 @@
 
 from django.conf.urls.defaults import *
 
-from contact_form.views import ContactPage
+from contact_form import views
 
 urlpatterns = patterns('',
-    url(r'^$', ContactPage.as_view(), name="index"),
-    url(r'^completed/$', "contact_form.views.completed", name="completed"),
+    url(r'^$', views.ContactPage.as_view(), name="contact"),
+    url(r'^completed/$', views.CompletedPage.as_view(), name="completed"),
 )
