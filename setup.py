@@ -10,6 +10,7 @@ setup(
     package_dir={'': 'src'},
     install_requires = (
 #        'django',       # commenting out... using django 1.3 alpha 1 for now
+        'unittest2',
         'docutils',      # so we can use django admin documentation
         'mock',          # used for testing purposes
         'django-debug-toolbar',
