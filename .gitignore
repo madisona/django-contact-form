@@ -1,0 +1,20 @@
+# bytecode
+*.pyc
+*.pyo
+*.egg-info*
+
+#ignore pycharm settings
+.idea*
+
+# vim swp files
+*.swp
+
+# test database
+project_db
+
+# buildout stuff
+bin/*
+.installed.cfg
+develop-eggs/*
+parts/*
+eggs/*
