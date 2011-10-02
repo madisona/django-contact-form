@@ -20,6 +20,7 @@ setup(
     long_description=open('README', 'r').read(),
     url="https://github.com/madisona/django-contact-form",
     packages=find_packages(exclude=["example"]),
+    include_package_data=True,
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     test_suite='runtests.runtests',
