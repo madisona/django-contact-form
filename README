@@ -1,0 +1,9 @@
+
+An Extensible Contact Form.
+Based entirely on James Bennett's django-contact-form:
+https://bitbucket.org/ubernostrum/django-contact-form/
+
+
+
+
+Utilizes Django's class based views, so required Django >= 1.3.

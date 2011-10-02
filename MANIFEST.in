@@ -1,3 +1,4 @@
 include README
+include LICENSE
 
 recursive-include src/contact_form/templates *

@@ -9,7 +9,7 @@ class ContactEmail(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=11, blank=True)
     message = models.TextField()
-    creationtime = models.DateTimeField(auto_now_add=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.name

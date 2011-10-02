@@ -10,11 +10,5 @@
 *.swp
 
 # test database
-project_db
+example_db
 
-# buildout stuff
-bin/*
-.installed.cfg
-develop-eggs/*
-parts/*
-eggs/*

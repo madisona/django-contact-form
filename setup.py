@@ -1,21 +1,38 @@
 
-from setuptools import setup
+from setuptools import setup, find_packages
+
+REQUIREMENTS = (
+    'django>=1.3',
+)
+TEST_REQUIREMENTS = (
+    'south',
+    'mock',
+    'django-debug-toolbar',
+)
+
+from contact_form import VERSION
 
 setup(
-    name="django-project",
-    version="0.1",
-    description="Django contact form app using buildout",
+    name="django-contact-form-gv",
+    version=VERSION,
     author="Aaron Madison",
-    packages=('contact_form',),
-    package_dir={'': 'src'},
-    install_requires = (
-        'django==1.3-alpha-1',       # commenting out... using django 1.3 alpha 1 for now
-        'unittest2',
-        'docutils',      # so we can use django admin documentation
-        'mock',          # used for testing purposes
-        'django-debug-toolbar',
-#        'pyyaml',        # useful for fixtures and testing
-#        'south',         # incredibly useful for database migrations
-    ),
-    dependency_links=('http://www.djangoproject.com/download/1.3-alpha-1/tarball/#egg=django-1.3-alpha-1',),
+    description="Django Contact Form using class based views.",
+    long_description=open('README', 'r').read(),
+    url="https://github.com/madisona/django-contact-form",
+    packages=find_packages(exclude=["example"]),
+    install_requires=REQUIREMENTS,
+    tests_require=TEST_REQUIREMENTS,
+    test_suite='runtests.runtests',
+    zip_safe=False,
+    classifiers = [
+        "Development Status :: 4 - Beta",
+        "Environment :: Web Environment",
+        "Framework :: Django",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Libraries :: Application Frameworks",
+    ],
 )
