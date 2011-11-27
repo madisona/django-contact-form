@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 
 class BaseEmailFormMixin(object):
     from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [email for email, _ in settings.MANAGERS]
+    recipient_list = [email for _, email in settings.MANAGERS]
 
     subject_template_name = 'contact_form/email_subject.txt'
     message_template_name = 'contact_form/email_template.txt'
