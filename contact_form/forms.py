@@ -1,4 +1,3 @@
-
 from django import forms
 from django.conf import settings
 from django.forms.widgets import Textarea
@@ -50,7 +49,8 @@ class ContactForm(forms.Form, BaseEmailFormMixin):
 
     def __init__(self, user=None, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
-        if user:
+        if user and hasattr(user, "email"):
+            "AnonymousUser has no email"
             self.fields["email"].initial = user.email
             self.fields["name"].initial = user.get_full_name()
 

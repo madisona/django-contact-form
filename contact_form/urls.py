@@ -1,4 +1,3 @@
-
 from django.conf.urls.defaults import *
 
 from contact_form.views import ContactFormView, CompletedPage
