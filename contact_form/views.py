@@ -1,6 +1,7 @@
-
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, CreateView, FormView
+
+from forms import ContactForm
 
 class CompletedPage(TemplateView):
     template_name = "contact_form/contact_completed.html"
@@ -18,7 +19,15 @@ class ContactFormMixin(object):
         return reverse("contact_form:completed")
 
 class ContactFormView(ContactFormMixin, FormView):
-    pass
+    form_class = ContactForm
+    template_name = "contact_form/contact.html"
+
+    def get_form_kwargs(self):
+        "We use user in the form to autocomplete some fields"
+        kwargs = super(ContactFormView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
 
 class ContactModelFormView(ContactFormMixin, CreateView):
     pass
