@@ -10,5 +10,5 @@
 *.swp
 
 # test database
-example_db
+example.db
 

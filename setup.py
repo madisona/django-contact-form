@@ -5,7 +5,6 @@ REQUIREMENTS = (
     'django>=1.3',
 )
 TEST_REQUIREMENTS = (
-    'south',
     'mock',
     'django-debug-toolbar',
 )
