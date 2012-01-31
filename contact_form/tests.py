@@ -3,16 +3,12 @@
 Contact Form tests
 """
 import mock
-from mock import patch, Mock
 
 from django import test
-from django import template
 from django.core.urlresolvers import reverse
 from django.template import loader, TemplateDoesNotExist
 
-from contact_form import views
-from contact_form import models
-from contact_form import forms
+from contact_form import forms, views
 
 
 
@@ -25,6 +21,7 @@ class AcceptanceTestsContactCompletedPage(test.TestCase):
     def test_uses_completed_template_when_rendering_page(self):
         response = self.client.get(reverse("contact_form:completed"))
         self.assertTemplateUsed(response, views.CompletedPage.template_name)
+
 
 class BaseEmailFormMixinTests(test.TestCase):
 
@@ -75,14 +72,17 @@ class BaseEmailFormMixinTests(test.TestCase):
             form.get_context()
         self.assertEqual("Cannot generate Context when form is invalid.", ctx.exception.message)
 
-    @patch("contact_form.forms.send_mail")
-    @patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
-    def test_sends_mail_with_message_dict(self, get_message_dict, send_mail):
+    @mock.patch("contact_form.forms.EmailMessage")
+    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
+    def test_sends_mail_with_message_dict(self, get_message_dict, email_class):
+        mock_request = test.RequestFactory().get('/')
         get_message_dict.return_value = {"name": "aaron"}
-        form = forms.BaseEmailFormMixin()
-        form.send_email(Mock())
 
-        self.assertEqual([(), dict(get_message_dict.return_value, fail_silently=False)] , send_mail.call_args)
+        form = forms.BaseEmailFormMixin()
+        form.send_email(mock_request)
+
+        email_class.assert_called_once_with(**get_message_dict.return_value)
+        email_class.return_value.send.assert_called_once_with(fail_silently=False)
 
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_subject")
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message")
@@ -92,11 +92,12 @@ class BaseEmailFormMixinTests(test.TestCase):
 
         self.assertEqual({
             "from_email": form.from_email,
-            "recipient_list": form.recipient_list,
-            "message": get_message.return_value,
+            "to": form.recipient_list,
+            "body": get_message.return_value,
             "subject": get_subject.return_value,
         }, message_dict)
-        
+
+
 class ContactFormTests(test.TestCase):
 
     def test_is_subclass_of_form_and_base_contact_form_mixin(self):
@@ -118,6 +119,7 @@ class ContactFormTests(test.TestCase):
         except TemplateDoesNotExist:
             template_exists = 0
         self.assertTrue(template_exists, "Email message template does not exist")
+
 
 class ContactModelFormTests(test.TestCase):
 

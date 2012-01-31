@@ -1,1 +1,6 @@
-<p>Contact Completed</p>
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <p>{% trans "Thank you! Your message was sent successfully." %}</p>
+{% endblock %}

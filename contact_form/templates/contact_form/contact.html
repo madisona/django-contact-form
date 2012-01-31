@@ -1,7 +1,13 @@
-<h1>Contact Form</h1>
-<p>This is the contact form</p>
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Contact Form" %}</h1>
+<p>{% trans "This is the contact form" %}</p>
 
 <form action="" method="post">{% csrf_token %}
     <p>{{ form.as_ul }}</p>
-    <input type="submit" value="Contact Us" />
+    <input type="submit" value="{% trans "Contact Us" %}" />
 </form>
+{% endblock %}
+

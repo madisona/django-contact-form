@@ -4,7 +4,6 @@ You have receive a contact request.
 
 Name: {{ name }}
 Email: {{ email }}
-Phone: {{ phone }}
-Message: {{ message }}
+Message: {{ body }}
 
 Have a great day!

@@ -4,7 +4,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^contact/', include("contact_form.urls", namespace="contact_form")),
-
+    url(r'^contact/', include("contact_form.urls", namespace="contact_form")),
     url(r'^admin/', include(admin.site.urls)),
 )
