@@ -2,6 +2,8 @@
 *.pyc
 *.pyo
 *.egg-info*
+build/*
+dist/*
 
 #ignore pycharm settings
 .idea*
