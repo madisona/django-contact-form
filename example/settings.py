@@ -1,4 +1,3 @@
-
 # app lives in a directory above our example
 # project so we need to make sure it is findable on our path.
 import sys
@@ -14,7 +13,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Joe Smith', 'aaron.l.madison@gmail.com'),
+    ('Joe Smith', 'joe.smith@example.com'),
 )
 
 MANAGERS = ADMINS
