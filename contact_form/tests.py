@@ -56,12 +56,14 @@ class BaseEmailFormMixinTests(test.TestCase):
         self.assertEqual('This is a template.', subject)
         render_to_string.assert_called_once_with(form.subject_template_name, context)
 
-    def test_get_context_returns_cleaned_data_when_form_is_valid(self):
+    def test_get_context_returns_cleaned_data_with_request_when_form_is_valid(self):
+        request = test.RequestFactory().post("/")
         class TestForm(forms.BaseEmailFormMixin, forms.forms.Form):
             name = forms.forms.CharField()
 
         form = TestForm(data={'name': 'test'})
-        self.assertEqual(dict(name='test'), form.get_context())
+        form.request = request
+        self.assertEqual(dict(name='test', request=request), form.get_context())
 
     def test_get_context_returns_value_error_when_form_is_invalid(self):
         class TestForm(forms.BaseEmailFormMixin, forms.forms.Form):
@@ -72,17 +74,27 @@ class BaseEmailFormMixinTests(test.TestCase):
             form.get_context()
         self.assertEqual("Cannot generate Context when form is invalid.", ctx.exception.message)
 
-    @mock.patch("contact_form.forms.EmailMessage")
+    @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
     def test_sends_mail_with_message_dict(self, get_message_dict, email_class):
         mock_request = test.RequestFactory().get('/')
-        get_message_dict.return_value = {"name": "aaron"}
+        get_message_dict.return_value = {"to": ["user@example.com"]}
 
         form = forms.BaseEmailFormMixin()
         form.send_email(mock_request)
 
         email_class.assert_called_once_with(**get_message_dict.return_value)
         email_class.return_value.send.assert_called_once_with(fail_silently=False)
+
+    @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
+    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
+    def test_send_mail_sets_request_on_instance(self, get_message_dict, *mocks):
+        mock_request = test.RequestFactory().get('/')
+        get_message_dict.return_value = {"to": ["user@example.com"]}
+
+        form = forms.BaseEmailFormMixin()
+        form.send_email(mock_request)
+        self.assertEqual(mock_request, form.request)
 
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_subject")
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message")

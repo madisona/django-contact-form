@@ -21,9 +21,13 @@ class BaseEmailFormMixin(object):
         return ''.join(subject.splitlines())
 
     def get_context(self):
+        """
+        Context sent to templates for rendering include the form's cleaned
+        data and also the current Request object.
+        """
         if not self.is_valid():
             raise ValueError("Cannot generate Context when form is invalid.")
-        return self.cleaned_data
+        return dict(request=self.request, **self.cleaned_data)
 
     def get_message_dict(self):
         return {
