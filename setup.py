@@ -18,7 +18,7 @@ setup(
     description="Django Contact Form using class based views.",
     long_description=open('README', 'r').read(),
     url="https://github.com/madisona/django-contact-form",
-    packages=find_packages(exclude=["example"]),
+    packages=find_packages(exclude=["example*"]),
     include_package_data=True,
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
