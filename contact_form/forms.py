@@ -29,17 +29,29 @@ class BaseEmailFormMixin(object):
             raise ValueError("Cannot generate Context when form is invalid.")
         return dict(request=self.request, **self.cleaned_data)
 
+    def get_reply_to(self):
+        """
+        Subclasses can define a reply_to value (i. e. got from the
+        cleaned_data's email field).
+        """
+        raise NotImplementedError
+
     def get_message_dict(self):
-        return {
+        d = {
             "from_email": self.from_email,
             "to": self.recipient_list,
             "subject": self.get_subject(),
             "body": self.get_message(),
         }
+        try:
+            d['headers'] = {'Reply-To': self.get_reply_to()}
+        except NotImplementedError:
+            pass
+        return d
 
     def send_email(self, request, fail_silently=False):
         self.request = request
-        EmailMessage(**self.get_message_dict()).send(fail_silently=fail_silently)
+        return EmailMessage(**self.get_message_dict()).send(fail_silently=fail_silently)
 
 
 class ContactForm(forms.Form, BaseEmailFormMixin):
@@ -61,3 +73,6 @@ class BasicContactForm(ContactForm):
     name = forms.CharField(label=_(u'Your name'), max_length=100)
     email = forms.EmailField(label=_(u'Your email address'), max_length=200)
     body = forms.CharField(label=_(u'Your message'), widget=forms.Textarea())
+
+    def get_reply_to(self):
+        return self.cleaned_data['email']
