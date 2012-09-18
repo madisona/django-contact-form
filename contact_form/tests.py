@@ -133,12 +133,12 @@ class ContactFormTests(test.TestCase):
             template_exists = 0
         self.assertTrue(template_exists, "Email message template does not exist")
 
-    def test_sends_mail_with_reply_to(self):
+    def test_sends_mail_with_headers(self):
         class ReplyToForm(forms.ContactForm):
             email = forms.forms.EmailField()
 
-            def get_reply_to(self):
-                return self.cleaned_data['email']
+            def get_email_headers(self):
+                return {'Reply-To': self.cleaned_data['email']}
 
         mock_request = test.RequestFactory().get('/')
         reply_to_email = u'user@example.com'  # the user's email
