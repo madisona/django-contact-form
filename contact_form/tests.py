@@ -111,6 +111,27 @@ class BaseEmailFormMixinTests(test.TestCase):
             "subject": get_subject.return_value,
         }, message_dict)
 
+    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_subject")
+    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message")
+    def test_get_message_dict_adds_headers_when_present(self, get_message, get_subject):
+        email_headers = {"Reply-To": "user@example.com"}
+
+        class HeadersForm(forms.BaseEmailFormMixin):
+
+            def get_email_headers(self):
+                return email_headers
+
+        form = HeadersForm()
+        message_dict = form.get_message_dict()
+
+        self.assertEqual({
+            "from_email": form.from_email,
+            "to": form.recipient_list,
+            "body": get_message.return_value,
+            "subject": get_subject.return_value,
+            "headers": email_headers,
+        }, message_dict)
+
 
 class ContactFormTests(test.TestCase):
 
