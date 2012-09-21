@@ -82,10 +82,11 @@ class BaseEmailFormMixinTests(test.TestCase):
         get_message_dict.return_value = {"to": ["user@example.com"]}
 
         form = forms.BaseEmailFormMixin()
-        form.send_email(mock_request)
+        result = form.send_email(mock_request)
 
         email_class.assert_called_once_with(**get_message_dict.return_value)
         email_class.return_value.send.assert_called_once_with(fail_silently=False)
+        self.assertEqual(email_class.return_value.send.return_value, result)
 
     @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
