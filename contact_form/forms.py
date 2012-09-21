@@ -31,7 +31,7 @@ class BaseEmailFormMixin(object):
 
     def get_email_headers(self):
         """
-        Subclasses must replace this method to define additional settings like
+        Subclasses can replace this method to define additional settings like
         a reply_to value.
         """
         return None
