@@ -5,6 +5,7 @@ Contact Form tests
 import mock
 
 from django import test
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django.template import loader, TemplateDoesNotExist
 
@@ -131,6 +132,22 @@ class ContactFormTests(test.TestCase):
         except TemplateDoesNotExist:
             template_exists = 0
         self.assertTrue(template_exists, "Email message template does not exist")
+
+    def test_sends_mail_with_headers(self):
+        class ReplyToForm(forms.ContactForm):
+            email = forms.forms.EmailField()
+
+            def get_email_headers(self):
+                return {'Reply-To': self.cleaned_data['email']}
+
+        mock_request = test.RequestFactory().get('/')
+        reply_to_email = u'user@example.com'  # the user's email
+
+        form = ReplyToForm(data={'email': reply_to_email})
+        message = form.send_email(mock_request)
+
+        reply_to_header_email = mail.outbox[0].extra_headers['Reply-To']
+        self.assertEqual(reply_to_email, reply_to_header_email)
 
 
 class ContactModelFormTests(test.TestCase):
