@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-10 11:11-0200\n"
+"Language: pt-br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:72
+msgid "Your name"
+msgstr "Seu nome"
+
+#: forms.py:73
+msgid "Your email address"
+msgstr "Seu e-mail"
+
+#: forms.py:74
+msgid "Your message"
+msgstr "Sua mensagem"
+
+#: templates/contact_form/contact.html:5
+msgid "Contact Form"
+msgstr "Formulário de contato"
+
+#: templates/contact_form/contact.html:6
+msgid "This is the contact form"
+msgstr "Este é o formulário de contato"
+
+#: templates/contact_form/contact.html:10
+msgid "Contact Us"
+msgstr "Entre em contato"
+
+#: templates/contact_form/contact_completed.html:5
+msgid "Thank you! Your message was sent successfully."
+msgstr "Obrigado! Sua mensagem foi enviada com sucesso."
