@@ -1,9 +1,6 @@
 
 from setuptools import setup, find_packages
 
-REQUIREMENTS = (
-    'django>=1.3',
-)
 TEST_REQUIREMENTS = (
     'mock',
     'django-debug-toolbar',
@@ -20,7 +17,6 @@ setup(
     url="https://github.com/madisona/django-contact-form",
     packages=find_packages(exclude=["example*"]),
     include_package_data=True,
-    install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     test_suite='runtests.runtests',
     zip_safe=False,
