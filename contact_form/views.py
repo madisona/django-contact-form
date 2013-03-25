@@ -1,9 +1,10 @@
-
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, CreateView, FormView
 
+
 class CompletedPage(TemplateView):
     template_name = "contact_form/contact_completed.html"
+
 
 class ContactFormMixin(object):
     """
@@ -17,8 +18,10 @@ class ContactFormMixin(object):
     def get_success_url(self):
         return reverse("contact_form:completed")
 
+
 class ContactFormView(ContactFormMixin, FormView):
     pass
+
 
 class ContactModelFormView(ContactFormMixin, CreateView):
     pass
