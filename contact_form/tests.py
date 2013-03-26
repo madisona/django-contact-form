@@ -11,7 +11,6 @@ from django.template import loader, TemplateDoesNotExist
 from contact_form import forms, views
 
 
-
 class AcceptanceTestsContactCompletedPage(test.TestCase):
 
     def test_receives_200_status_code_for_completed_page(self):
@@ -72,7 +71,7 @@ class BaseEmailFormMixinTests(test.TestCase):
         form = TestForm(data={})
         with self.assertRaises(ValueError) as ctx:
             form.get_context()
-        self.assertEqual("Cannot generate Context when form is invalid.", ctx.exception.message)
+        self.assertEqual("Cannot generate Context when form is invalid.", str(ctx.exception))
 
     @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
     @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
