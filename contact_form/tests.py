@@ -138,20 +138,12 @@ class ContactFormTests(test.TestCase):
         self.assertTrue(issubclass(forms.ContactForm, forms.forms.Form))
 
     def test_has_valid_subject_template(self):
-        template_exists = 1
-        try:
-            loader.render_to_string(forms.ContactForm.subject_template_name)
-        except TemplateDoesNotExist:
-            template_exists = 0
-        self.assertTrue(template_exists, "Subject template does not exist")
+        loader.render_to_string(forms.ContactForm.subject_template_name)
+        self.assertTrue("Subject template does not exist")
 
     def test_has_valid_message_template(self):
-        template_exists = 1
-        try:
-            loader.render_to_string(forms.ContactForm.message_template_name)
-        except TemplateDoesNotExist:
-            template_exists = 0
-        self.assertTrue(template_exists, "Email message template does not exist")
+        loader.render_to_string(forms.ContactForm.message_template_name)
+        self.assertTrue("Email message template does not exist")
 
     def test_sends_mail_with_headers(self):
         class ReplyToForm(forms.ContactForm):
@@ -179,17 +171,10 @@ class ContactModelFormTests(test.TestCase):
         self.assertTrue(issubclass(forms.ContactModelForm, forms.forms.ModelForm))
 
     def test_has_valid_subject_template(self):
-        template_exists = 1
-        try:
-            loader.render_to_string(forms.ContactModelForm.subject_template_name)
-        except TemplateDoesNotExist:
-            template_exists = 0
-        self.assertTrue(template_exists, "Subject template does not exist")
+        loader.render_to_string(forms.ContactModelForm.subject_template_name)
+        self.assertTrue("Subject template does not exist")
 
     def test_has_valid_message_template(self):
         template_exists = 1
-        try:
-            loader.render_to_string(forms.ContactModelForm.message_template_name)
-        except TemplateDoesNotExist:
-            template_exists = 0
-        self.assertTrue(template_exists, "Email message template does not exist")
+        loader.render_to_string(forms.ContactModelForm.message_template_name)
+        self.assertTrue("Email message template does not exist")
