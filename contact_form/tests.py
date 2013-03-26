@@ -167,6 +167,8 @@ class ContactFormTests(test.TestCase):
         form = ReplyToForm(data={'email': reply_to_email})
         message = form.send_email(mock_request)
 
+        self.assertEqual(len(mail.outbox), 1)
+
         reply_to_header_email = mail.outbox[0].extra_headers['Reply-To']
         self.assertEqual(reply_to_email, reply_to_header_email)
 
