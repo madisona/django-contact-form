@@ -15,6 +15,9 @@ setup(
     url="https://github.com/futurecolors/django-contact-form",
     packages=find_packages(exclude=["example*"]),
     include_package_data=True,
+    install_requires=[
+        'django-templated-email>=0.4.7,<0.5',
+    ],
     tests_require=TEST_REQUIREMENTS,
     zip_safe=False,
     classifiers=[

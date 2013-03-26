@@ -8,7 +8,10 @@ Extensible contacts form implemented in class-based views. Forked from `django-c
 
 .. _django-contact-form: https://github.com/madisona/django-contact-form
 
-Tested with Django >=1.4
+Tested with Django >=1.4.
+
+Uses django-templated-email to send mail by default.
+
 
 Install
 =======

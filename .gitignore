@@ -4,6 +4,7 @@
 *.egg-info*
 build/*
 dist/*
+.coverage
 
 #ignore pycharm settings
 .idea*

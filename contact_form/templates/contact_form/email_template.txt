@@ -1,9 +1,0 @@
-Hi there,
-
-You have receive a contact request.
-
-Name: {{ name }}
-Email: {{ email }}
-Message: {{ body }}
-
-Have a great day!

@@ -8,12 +8,8 @@ TEMPLATE_DIRS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
+        'NAME': ':memory:',
+    },
 }
 
 # Make this unique, and don't share it with anybody.
