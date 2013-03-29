@@ -20,6 +20,7 @@ setup(
     ],
     tests_require=TEST_REQUIREMENTS,
     zip_safe=False,
+
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
