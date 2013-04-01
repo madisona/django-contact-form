@@ -1,24 +1,24 @@
-
 from django import forms
 from django.conf import settings
-from django.core.mail.message import EmailMessage
-from django.template import loader
 from django.utils.translation import ugettext_lazy as _
+from templated_email import send_templated_mail
 
 
 class BaseEmailFormMixin(object):
     from_email = settings.DEFAULT_FROM_EMAIL
+    message_template = 'contact_form/email/contact_form_reply.html'
     recipient_list = [email for _, email in settings.MANAGERS]
 
-    subject_template_name = 'contact_form/email_subject.txt'
-    message_template_name = 'contact_form/email_template.txt'
-
-    def get_message(self):
-        return loader.render_to_string(self.message_template_name, self.get_context())
-
-    def get_subject(self):
-        subject = loader.render_to_string(self.subject_template_name, self.get_context())
-        return ''.join(subject.splitlines())
+    def get_message_template(self):
+        ext = self.message_template.split('.')[-1]
+        parts = self.message_template.split('/')
+        template_prefix = self.message_template.replace(parts[-1], '')
+        template_name = parts[-1].replace(ext, '')[:-1]
+        return {
+            'template_prefix': template_prefix,
+            'template_suffix': ext,
+            'template_name': template_name,
+        }
 
     def get_context(self):
         """
@@ -36,21 +36,22 @@ class BaseEmailFormMixin(object):
         """
         return None
 
+    def get_recipient_list(self):
+        return self.recipient_list
+
     def get_message_dict(self):
-        message_dict = {
+        return {
             "from_email": self.from_email,
-            "to": self.recipient_list,
-            "subject": self.get_subject(),
-            "body": self.get_message(),
+            "recipient_list": self.get_recipient_list(),
+            "context": self.get_context(),
+            "headers": self.get_email_headers(),
         }
-        headers = self.get_email_headers()
-        if headers is not None:
-            message_dict['headers'] = headers
-        return message_dict
 
     def send_email(self, request, fail_silently=False):
         self.request = request
-        return EmailMessage(**self.get_message_dict()).send(fail_silently=fail_silently)
+        kwargs = self.get_message_template()
+        kwargs.update(self.get_message_dict())
+        return send_templated_mail(fail_silently=fail_silently, **kwargs)
 
 
 class ContactForm(forms.Form, BaseEmailFormMixin):

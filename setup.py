@@ -1,30 +1,27 @@
-
 from setuptools import setup, find_packages
 
-REQUIREMENTS = (
-    'django>=1.3',
-)
 TEST_REQUIREMENTS = (
     'mock',
-    'django-debug-toolbar',
 )
 
 from contact_form import VERSION
 
 setup(
-    name="django-contact-form-gv",
+    name="django-contact-form-fc",
     version=VERSION,
-    author="Aaron Madison",
+    author="Ilya Baryshev",
     description="Django Contact Form using class based views.",
-    long_description=open('README', 'r').read(),
-    url="https://github.com/madisona/django-contact-form",
+    long_description=open('README.rst', 'r').read(),
+    url="https://github.com/futurecolors/django-contact-form",
     packages=find_packages(exclude=["example*"]),
     include_package_data=True,
-    install_requires=REQUIREMENTS,
+    install_requires=[
+        'django-templated-email>=0.4.7,<0.5',
+    ],
     tests_require=TEST_REQUIREMENTS,
-    test_suite='runtests.runtests',
     zip_safe=False,
-    classifiers = [
+
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",

@@ -1,0 +1,14 @@
+{% block subject %}Contact request received{% endblock %}
+{% block html %}
+    <p>Hi,</p>
+
+    <p>You have received a contact request.</p>
+
+    <dl>
+        <dt>Name</dt><dd>{{ name }}</dd>
+        <dt>Email</dt><dd>{{ email }}</dd>
+        <dt>Message</dt><dd>{{ body }}</dd>
+    </dl>
+
+    <p>Have a great day!</p>
+{% endblock %}
