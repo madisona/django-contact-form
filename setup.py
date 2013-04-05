@@ -1,4 +1,3 @@
-
 from setuptools import setup, find_packages
 
 REQUIREMENTS = (
@@ -24,7 +23,7 @@ setup(
     tests_require=TEST_REQUIREMENTS,
     test_suite='runtests.runtests',
     zip_safe=False,
-    classifiers = [
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",

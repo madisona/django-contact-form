@@ -1,4 +1,3 @@
-
 """
 Contact Form tests
 """
