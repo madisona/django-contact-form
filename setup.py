@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 REQUIREMENTS = (
-    'django>=1.3',
+    'django>=1.4',
 )
 TEST_REQUIREMENTS = (
     'mock',
@@ -24,7 +24,7 @@ setup(
     test_suite='runtests.runtests',
     zip_safe=False,
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
         "Intended Audience :: Developers",
