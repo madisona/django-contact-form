@@ -35,10 +35,16 @@ class BaseEmailFormMixin(object):
         """
         return None
 
+    def get_recipient_list(self):
+        return self.recipient_list
+
+    def get_from_email(self):
+        return self.from_email
+
     def get_message_dict(self):
         message_dict = {
-            "from_email": self.from_email,
-            "to": self.recipient_list,
+            "from_email": self.get_from_email(),
+            "to": self.get_recipient_list(),
             "subject": self.get_subject(),
             "body": self.get_message(),
         }
