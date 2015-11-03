@@ -1,9 +1,9 @@
-Hi there,
+{% load i18n %}{% trans "Hi there," %}
 
-You have receive a contact request.
+{% trans "You have receive a contact request." %}
 
-Name: {{ name }}
-Email: {{ email }}
-Message: {{ body }}
+{% trans "Name:" %} {{ name }}
+{% trans "Email:" %} {{ email }}
+{% trans "Message:" %} {{ body }}
 
-Have a great day!
+{% trans "Have a great day!" %}

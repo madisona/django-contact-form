@@ -1,1 +1,1 @@
-Contact request received
+{% load i18n %}{% trans "Contact request received" %}
