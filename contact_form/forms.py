@@ -41,12 +41,24 @@ class BaseEmailFormMixin(object):
     def get_from_email(self):
         return self.from_email
 
+    def get_cc(self):
+        return None
+
+    def get_bcc(self):
+        return None
+
+    def get_reply_to(self):
+        return None
+
     def get_message_dict(self):
         message_dict = {
             "from_email": self.get_from_email(),
             "to": self.get_recipient_list(),
             "subject": self.get_subject(),
             "body": self.get_message(),
+            "cc": self.get_cc(),
+            "bcc": self.get_bcc(),
+            "reply_to": self.get_reply_to(),
         }
         headers = self.get_email_headers()
         if headers is not None:
@@ -78,5 +90,5 @@ class BasicContactForm(ContactForm):
     email = forms.EmailField(label=_(u'Your email address'), max_length=200)
     body = forms.CharField(label=_(u'Your message'), widget=forms.Textarea())
 
-    def get_email_headers(self):
-        return {'Reply-To': self.cleaned_data['email']}
+    def get_reply_to(self):
+        return [self.cleaned_data['email']]

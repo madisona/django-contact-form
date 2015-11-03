@@ -7,9 +7,9 @@ from django import test
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.template import loader, TemplateDoesNotExist
+from django import forms as django_forms
 
 from contact_form import forms, views
-
 
 
 class AcceptanceTestsContactCompletedPage(test.TestCase):
@@ -21,6 +21,32 @@ class AcceptanceTestsContactCompletedPage(test.TestCase):
     def test_uses_completed_template_when_rendering_page(self):
         response = self.client.get(reverse("contact_form:completed"))
         self.assertTemplateUsed(response, views.CompletedPage.template_name)
+
+
+class SampleBasicTestForm(forms.BaseEmailFormMixin, django_forms.Form):
+    field = django_forms.CharField()
+
+
+class SampleCustomizedTestForm(forms.BaseEmailFormMixin, django_forms.Form):
+    field = django_forms.CharField()
+
+    def get_subject(self):
+        return "My Subject"
+
+    def get_bcc(self):
+        return ["bcc@example.com"]
+
+    def get_cc(self):
+        return ["cc@example.com"]
+
+    def get_from_email(self):
+        return ["from@example.com"]
+
+    def get_reply_to(self):
+        return ["reply@example.com"]
+
+    def get_email_headers(self):
+        return {"Reply-To": "user@example.com"}
 
 
 class BaseEmailFormMixinTests(test.TestCase):
@@ -97,39 +123,49 @@ class BaseEmailFormMixinTests(test.TestCase):
         form.send_email(mock_request)
         self.assertEqual(mock_request, form.request)
 
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_subject")
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message")
-    def test_gets_message_dict(self, get_message, get_subject):
-        form = forms.BaseEmailFormMixin()
+    def test_gets_message_dict(self):
+        # tests default message dict without overrides
+        form = SampleBasicTestForm(data={"field": "thing"})
+        form.request = test.RequestFactory().get("/")
         message_dict = form.get_message_dict()
 
         self.assertEqual({
             "from_email": form.from_email,
             "to": form.recipient_list,
-            "body": get_message.return_value,
-            "subject": get_subject.return_value,
+            "body": form.get_message(),
+            "subject": form.get_subject(),
+            "cc": None,
+            "bcc": None,
+            "reply_to": None,
         }, message_dict)
 
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_subject")
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message")
-    def test_get_message_dict_adds_headers_when_present(self, get_message, get_subject):
-        email_headers = {"Reply-To": "user@example.com"}
-
-        class HeadersForm(forms.BaseEmailFormMixin):
-
-            def get_email_headers(self):
-                return email_headers
-
-        form = HeadersForm()
+    def test_get_message_dict_adds_headers_when_present(self):
+        form = SampleCustomizedTestForm(data={"field": "thing"})
+        form.request = test.RequestFactory().get("/")
         message_dict = form.get_message_dict()
 
-        self.assertEqual({
-            "from_email": form.from_email,
-            "to": form.recipient_list,
-            "body": get_message.return_value,
-            "subject": get_subject.return_value,
-            "headers": email_headers,
-        }, message_dict)
+        self.assertEqual(form.get_email_headers(), message_dict["headers"])
+
+    def test_get_message_dict_adds_cc_when_present(self):
+        form = SampleCustomizedTestForm(data={"field": "Thing"})
+        form.request = test.RequestFactory().get("/")
+        message_dict = form.get_message_dict()
+
+        self.assertEqual(["cc@example.com"], message_dict["cc"])
+
+    def test_get_message_dict_adds_bcc_when_present(self):
+        form = SampleCustomizedTestForm(data={"field": "Thing"})
+        form.request = test.RequestFactory().get("/")
+        message_dict = form.get_message_dict()
+
+        self.assertEqual(["bcc@example.com"], message_dict["bcc"])
+
+    def test_get_message_dict_adds_reply_to_when_present(self):
+        form = SampleCustomizedTestForm(data={"field": "Thing"})
+        form.request = test.RequestFactory().get("/")
+        message_dict = form.get_message_dict()
+
+        self.assertEqual(["reply@example.com"], message_dict["reply_to"])
 
 
 class ContactFormTests(test.TestCase):
@@ -158,17 +194,16 @@ class ContactFormTests(test.TestCase):
         class ReplyToForm(forms.ContactForm):
             email = forms.forms.EmailField()
 
-            def get_email_headers(self):
-                return {'Reply-To': self.cleaned_data['email']}
+            def get_reply_to(self):
+                return [self.cleaned_data['email']]
 
         mock_request = test.RequestFactory().get('/')
         reply_to_email = u'user@example.com'  # the user's email
 
         form = ReplyToForm(data={'email': reply_to_email})
-        message = form.send_email(mock_request)
+        form.send_email(mock_request)
 
-        reply_to_header_email = mail.outbox[0].extra_headers['Reply-To']
-        self.assertEqual(reply_to_email, reply_to_header_email)
+        self.assertEqual(reply_to_email, mail.outbox[0].message()["Reply-To"])
 
 
 class ContactModelFormTests(test.TestCase):

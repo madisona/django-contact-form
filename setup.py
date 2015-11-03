@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 REQUIREMENTS = (
-    'django>=1.4',
+    'django>=1.8',
 )
 TEST_REQUIREMENTS = (
     'mock',
@@ -27,6 +27,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
+        "Framework :: Django :: 1.8",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
