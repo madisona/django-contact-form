@@ -98,28 +98,26 @@ class BaseEmailFormMixinTests(test.TestCase):
         form = TestForm(data={})
         with self.assertRaises(ValueError) as ctx:
             form.get_context()
-        self.assertEqual("Cannot generate Context when form is invalid.", ctx.exception.message)
+        self.assertEqual("Cannot generate Context when form is invalid.", str(ctx.exception))
 
-    @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
-    def test_sends_mail_with_message_dict(self, get_message_dict, email_class):
+    def test_sends_mail_with_message_dict(self):
         mock_request = test.RequestFactory().get('/')
-        get_message_dict.return_value = {"to": ["user@example.com"]}
 
-        form = forms.BaseEmailFormMixin()
-        result = form.send_email(mock_request)
+        form = SampleBasicTestForm(data={"field": "thing"})
+        form.send_email(mock_request)
 
-        email_class.assert_called_once_with(**get_message_dict.return_value)
-        email_class.return_value.send.assert_called_once_with(fail_silently=False)
-        self.assertEqual(email_class.return_value.send.return_value, result)
+        email = mail.outbox[0]
+        self.assertEqual(form.recipient_list, email.to)
+        self.assertEqual(form.from_email, email.from_email)
+        self.assertEqual(form.get_subject(), email.subject)
+        self.assertEqual(form.get_message(), email.body)
+        self.assertEqual([], email.cc)
+        self.assertEqual([], email.bcc)
 
-    @mock.patch("contact_form.forms.EmailMessage", autospec=True, mocksignature=True)
-    @mock.patch("contact_form.forms.BaseEmailFormMixin.get_message_dict")
-    def test_send_mail_sets_request_on_instance(self, get_message_dict, *mocks):
+    def test_send_mail_sets_request_on_instance(self):
         mock_request = test.RequestFactory().get('/')
-        get_message_dict.return_value = {"to": ["user@example.com"]}
 
-        form = forms.BaseEmailFormMixin()
+        form = SampleBasicTestForm(data={"field": "thing"})
         form.send_email(mock_request)
         self.assertEqual(mock_request, form.request)
 
