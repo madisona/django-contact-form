@@ -1,0 +1,19 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+install:
+  - pip install -r requirements/test.txt
+  - pip install -q Django==$DJANGO_VERSION
+script:
+  - coverage run --source=contact_form example/manage.py test
+  - coverage report --show-missing
+  - flake8 contact_form
+
+env:
+  - DJANGO_VERSION=1.8.18
+  - DJANGO_VERSION=1.9.13
+  - DJANGO_VERSION=1.10.7
+  - DJANGO_VERSION=1.11.1
