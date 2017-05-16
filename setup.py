@@ -15,7 +15,7 @@ setup(
     version=VERSION,
     author="Aaron Madison",
     description="Django Contact Form using class based views.",
-    long_description=open('README', 'r').read(),
+    long_description=open('README.rst', 'r').read(),
     url="https://github.com/madisona/django-contact-form",
     packages=find_packages(exclude=["example*"]),
     include_package_data=True,

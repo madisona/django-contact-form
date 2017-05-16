@@ -13,10 +13,12 @@ class BaseEmailFormMixin(object):
     message_template_name = 'contact_form/email_template.txt'
 
     def get_message(self):
-        return loader.render_to_string(self.message_template_name, self.get_context())
+        return loader.render_to_string(self.message_template_name,
+                                       self.get_context())
 
     def get_subject(self):
-        subject = loader.render_to_string(self.subject_template_name, self.get_context())
+        subject = loader.render_to_string(self.subject_template_name,
+                                          self.get_context())
         return ''.join(subject.splitlines())
 
     def get_context(self):
@@ -67,7 +69,8 @@ class BaseEmailFormMixin(object):
 
     def send_email(self, request, fail_silently=False):
         self.request = request
-        return EmailMessage(**self.get_message_dict()).send(fail_silently=fail_silently)
+        return EmailMessage(**self.get_message_dict()).send(
+            fail_silently=fail_silently)
 
 
 class ContactForm(forms.Form, BaseEmailFormMixin):

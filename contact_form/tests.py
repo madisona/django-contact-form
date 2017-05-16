@@ -13,7 +13,6 @@ from contact_form import forms, views
 
 
 class AcceptanceTestsContactCompletedPage(test.TestCase):
-
     def test_receives_200_status_code_for_completed_page(self):
         response = self.client.get(reverse("contact_form:completed"))
         self.assertEqual(200, response.status_code)
@@ -50,13 +49,14 @@ class SampleCustomizedTestForm(forms.BaseEmailFormMixin, django_forms.Form):
 
 
 class BaseEmailFormMixinTests(test.TestCase):
-
     @mock.patch('django.template.loader.render_to_string')
-    def test_get_message_returns_rendered_message_template(self, render_to_string):
+    def test_get_message_returns_rendered_message_template(
+            self, render_to_string):
         context = {'message': 'an example message.'}
 
         class TestForm(forms.BaseEmailFormMixin):
             message_template_name = "my_template.html"
+
             def get_context(self):
                 return context
 
@@ -64,15 +64,18 @@ class BaseEmailFormMixinTests(test.TestCase):
 
         message = form.get_message()
         self.assertEqual(render_to_string.return_value, message)
-        render_to_string.assert_called_once_with(form.message_template_name, context)
+        render_to_string.assert_called_once_with(form.message_template_name,
+                                                 context)
 
     @mock.patch('django.template.loader.render_to_string')
-    def test_get_subject_returns_single_line_rendered_subject_template(self, render_to_string):
+    def test_get_subject_returns_single_line_rendered_subject_template(
+            self, render_to_string):
         render_to_string.return_value = 'This is \na \ntemplate.'
         context = {'message': 'an example message.'}
 
         class TestForm(forms.BaseEmailFormMixin):
             subject_template_name = "my_template.html"
+
             def get_context(self):
                 return context
 
@@ -80,16 +83,20 @@ class BaseEmailFormMixinTests(test.TestCase):
 
         subject = form.get_subject()
         self.assertEqual('This is a template.', subject)
-        render_to_string.assert_called_once_with(form.subject_template_name, context)
+        render_to_string.assert_called_once_with(form.subject_template_name,
+                                                 context)
 
-    def test_get_context_returns_cleaned_data_with_request_when_form_is_valid(self):
+    def test_get_context_returns_cleaned_data_with_request_when_form_is_valid(
+            self):
         request = test.RequestFactory().post("/")
+
         class TestForm(forms.BaseEmailFormMixin, forms.forms.Form):
             name = forms.forms.CharField()
 
         form = TestForm(data={'name': 'test'})
         form.request = request
-        self.assertEqual(dict(name='test', request=request), form.get_context())
+        self.assertEqual(
+            dict(name='test', request=request), form.get_context())
 
     def test_get_context_returns_value_error_when_form_is_invalid(self):
         class TestForm(forms.BaseEmailFormMixin, forms.forms.Form):
@@ -98,7 +105,8 @@ class BaseEmailFormMixinTests(test.TestCase):
         form = TestForm(data={})
         with self.assertRaises(ValueError) as ctx:
             form.get_context()
-        self.assertEqual("Cannot generate Context when form is invalid.", str(ctx.exception))
+        self.assertEqual("Cannot generate Context when form is invalid.",
+                         str(ctx.exception))
 
     def test_sends_mail_with_message_dict(self):
         mock_request = test.RequestFactory().get('/')
@@ -167,9 +175,9 @@ class BaseEmailFormMixinTests(test.TestCase):
 
 
 class ContactFormTests(test.TestCase):
-
     def test_is_subclass_of_form_and_base_contact_form_mixin(self):
-        self.assertTrue(issubclass(forms.ContactForm, forms.BaseEmailFormMixin))
+        self.assertTrue(
+            issubclass(forms.ContactForm, forms.BaseEmailFormMixin))
         self.assertTrue(issubclass(forms.ContactForm, forms.forms.Form))
 
     def test_has_valid_subject_template(self):
@@ -186,7 +194,8 @@ class ContactFormTests(test.TestCase):
             loader.render_to_string(forms.ContactForm.message_template_name)
         except TemplateDoesNotExist:
             template_exists = 0
-        self.assertTrue(template_exists, "Email message template does not exist")
+        self.assertTrue(template_exists,
+                        "Email message template does not exist")
 
     def test_sends_mail_with_headers(self):
         class ReplyToForm(forms.ContactForm):
@@ -205,15 +214,17 @@ class ContactFormTests(test.TestCase):
 
 
 class ContactModelFormTests(test.TestCase):
-
     def test_is_subclass_of_model_form_and_base_contact_form_mixin(self):
-        self.assertTrue(issubclass(forms.ContactModelForm, forms.BaseEmailFormMixin))
-        self.assertTrue(issubclass(forms.ContactModelForm, forms.forms.ModelForm))
+        self.assertTrue(
+            issubclass(forms.ContactModelForm, forms.BaseEmailFormMixin))
+        self.assertTrue(
+            issubclass(forms.ContactModelForm, forms.forms.ModelForm))
 
     def test_has_valid_subject_template(self):
         template_exists = 1
         try:
-            loader.render_to_string(forms.ContactModelForm.subject_template_name)
+            loader.render_to_string(
+                forms.ContactModelForm.subject_template_name)
         except TemplateDoesNotExist:
             template_exists = 0
         self.assertTrue(template_exists, "Subject template does not exist")
@@ -221,7 +232,9 @@ class ContactModelFormTests(test.TestCase):
     def test_has_valid_message_template(self):
         template_exists = 1
         try:
-            loader.render_to_string(forms.ContactModelForm.message_template_name)
+            loader.render_to_string(
+                forms.ContactModelForm.message_template_name)
         except TemplateDoesNotExist:
             template_exists = 0
-        self.assertTrue(template_exists, "Email message template does not exist")
+        self.assertTrue(template_exists,
+                        "Email message template does not exist")

@@ -1,4 +1,5 @@
--r dist.txt
 
-mock
+coverage
 django-debug-toolbar
+flake8
+mock
