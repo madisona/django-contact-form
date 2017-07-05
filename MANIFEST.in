@@ -2,3 +2,4 @@ include README
 include LICENSE
 
 recursive-include contact_form/templates *
+recursive-include contact_form/locale *
