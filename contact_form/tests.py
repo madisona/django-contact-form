@@ -5,7 +5,7 @@ import mock
 
 from django import test
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import loader, TemplateDoesNotExist
 from django import forms as django_forms
 
