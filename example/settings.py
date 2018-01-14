@@ -95,7 +95,7 @@ SECRET_KEY = '6kfuaep$0j)5*b-zodi+p)x*xl$=27@s@queywbp_$_l4f#3a+'
 
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
