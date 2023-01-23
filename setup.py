@@ -5,7 +5,6 @@ REQUIREMENTS = (
 )
 TEST_REQUIREMENTS = (
     'mock',
-    'django-debug-toolbar',
 )
 
 from contact_form import VERSION
