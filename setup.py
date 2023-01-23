@@ -1,11 +1,10 @@
 from setuptools import setup, find_packages
 
 REQUIREMENTS = (
-    'django>=1.11,<3',
+    'django>=2.2',
 )
 TEST_REQUIREMENTS = (
     'mock',
-    'django-debug-toolbar',
 )
 
 from contact_form import VERSION

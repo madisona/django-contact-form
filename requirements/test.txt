@@ -1,5 +1,4 @@
 
 coverage
-django-debug-toolbar
 flake8
 mock
