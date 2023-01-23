@@ -1,8 +1,14 @@
+import django
+
 from django import forms
 from django.conf import settings
 from django.core.mail.message import EmailMessage
 from django.template import loader
-from django.utils.translation import ugettext_lazy as _
+
+if django.get_version() >= '3.0.0':
+    from django.utils.translation import gettext_lazy as _
+else:
+    from django.utils.translation import ugettext_lazy as _
 
 
 class BaseEmailFormMixin(object):

@@ -1,4 +1,9 @@
-from django.conf.urls import url
+import django
+
+if django.get_version() >= '2.0.0':
+    from django.urls import re_path as url
+else:
+    from django.conf.urls import url
 
 from contact_form import views, forms
 

@@ -1,6 +1,13 @@
 
+import django
 import debug_toolbar
-from django.conf.urls import url, include
+
+if django.get_version() >= '2.0.0':
+    from django.urls import re_path as url
+    from django.urls import include
+else:
+    from django.conf.urls import url, include
+
 from django.contrib import admin
 admin.autodiscover()
 
