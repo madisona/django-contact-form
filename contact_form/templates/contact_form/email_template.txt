@@ -1,6 +1,6 @@
 {% load i18n %}{% trans "Hi there," %}
 
-{% trans "You have receive a contact request." %}
+{% trans "You have received a contact request." %}
 
 {% trans "Name:" %} {{ name }}
 {% trans "Email:" %} {{ email }}
