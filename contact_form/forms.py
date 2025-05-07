@@ -79,13 +79,13 @@ class BaseEmailFormMixin(object):
             fail_silently=fail_silently)
 
 
-class ContactForm(forms.Form, BaseEmailFormMixin):
+class ContactForm(BaseEmailFormMixin, forms.Form):
     """
     Subclass this and declare your own fields.
     """
 
 
-class ContactModelForm(forms.ModelForm, BaseEmailFormMixin):
+class ContactModelForm(BaseEmailFormMixin, forms.ModelForm):
     """
     You'll need to declare the model yourself.
     """
