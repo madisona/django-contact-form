@@ -49,13 +49,12 @@ class SampleCustomizedTestForm(forms.BaseEmailFormMixin, django_forms.Form):
 
 
 class BaseEmailFormMixinTests(test.TestCase):
-    @mock.patch('django.template.loader.render_to_string')
-    def test_get_message_returns_rendered_message_template(
-            self, render_to_string):
-        context = {'message': 'an example message.'}
+
+    def test_get_message_returns_rendered_message_template(self):
+        context = {'body': 'an example message.', "name": "tester", "email": "a@b.com"}
 
         class TestForm(forms.BaseEmailFormMixin):
-            message_template_name = "my_template.html"
+            message_template_name = "contact_form/email_template.txt"
 
             def get_context(self):
                 return context
@@ -63,9 +62,9 @@ class BaseEmailFormMixinTests(test.TestCase):
         form = TestForm()
 
         message = form.get_message()
-        self.assertEqual(render_to_string.return_value, message)
-        render_to_string.assert_called_once_with(form.message_template_name,
-                                                 context)
+        self.assertIn("an example message.", message)
+        self.assertIn("a@b.com", message)
+        self.assertIn("tester", message)
 
     @mock.patch('django.template.loader.render_to_string')
     def test_get_subject_returns_single_line_rendered_subject_template(
@@ -238,3 +237,22 @@ class ContactModelFormTests(test.TestCase):
             template_exists = 0
         self.assertTrue(template_exists,
                         "Email message template does not exist")
+
+
+class BasicContactFormTests(test.TestCase):
+
+    def test_basic_contact_form_get_message_dict_shows_rendered_template_values(self):
+        form = forms.BasicContactForm(data={"name": "Tester", "email": "a@b.com", "body": "Contact Me!"})
+        form.request = test.RequestFactory().get("/")
+        message_dict = form.get_message_dict()
+
+        self.assertIn("Contact Me!", message_dict['body'])
+        self.assertIn("Tester", message_dict['body'])
+        self.assertIn("a@b.com", message_dict['body'])
+
+    def test_basic_contact_form_get_message_dict_shows_subject_from_template(self):
+        form = forms.BasicContactForm(data={"name": "Tester", "email": "a@b.com", "body": "Contact Me!"})
+        form.request = test.RequestFactory().get("/")
+        message_dict = form.get_message_dict()
+
+        self.assertIn("Contact request received", message_dict['subject'])
