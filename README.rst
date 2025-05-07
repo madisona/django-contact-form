@@ -1,9 +1,6 @@
 Django Contact Forms Generic Views
 ==================================
 
-.. image:: https://travis-ci.org/madisona/django-contact-form.svg?branch=master
-:target: https://travis-ci.org/madisona/django-contact-form
-
 An Extensible Contact Form.
 Based entirely on James Bennett's django-contact-form:
 https://bitbucket.org/ubernostrum/django-contact-form/
